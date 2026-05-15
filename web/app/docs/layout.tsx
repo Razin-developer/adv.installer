@@ -27,6 +27,7 @@ const nav = [
       { label: 'Build locally', href: '#local-development' },
       { label: 'Link globally', href: '#global-linking' },
       { label: 'Package preview', href: '#package-preview' },
+      { label: 'Tailwind integration', href: '#tailwind' },
     ],
   },
   {

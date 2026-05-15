@@ -13,6 +13,7 @@ export function buildMobileCommand(
         args: ['create-expo-app@latest', projectName, '--template', 'blank-typescript'],
         cwd: parentDir,
         description: 'Creating Expo project',
+        interactive: true,
       };
     case 'react-native-cli':
       return {
@@ -20,6 +21,7 @@ export function buildMobileCommand(
         args: ['@react-native-community/cli', 'init', projectName],
         cwd: parentDir,
         description: 'Creating React Native project',
+        interactive: true,
       };
     case 'flutter':
       return {
@@ -27,6 +29,7 @@ export function buildMobileCommand(
         args: ['create', projectName],
         cwd: parentDir,
         description: 'Creating Flutter project',
+        interactive: true,
       };
     case 'kotlin-android':
       // No official CLI; we create a basic folder structure

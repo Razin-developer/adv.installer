@@ -17,15 +17,15 @@ export function buildWebsiteCommand(
     case 'vue-vite':
       return buildViteCommand(projectName, parentDir, pm, 'vue-ts');
     case 'nuxt':
-      return { cmd: 'npx', args: ['nuxi@latest', 'init', projectName], cwd: parentDir, description: 'Creating Nuxt project' };
+      return { cmd: 'npx', args: ['nuxi@latest', 'init', projectName], cwd: parentDir, description: 'Creating Nuxt project', interactive: true };
     case 'angular':
-      return { cmd: 'npx', args: ['@angular/cli', 'new', projectName, '--skip-tests'], cwd: parentDir, description: 'Creating Angular project' };
+      return { cmd: 'npx', args: ['@angular/cli', 'new', projectName, '--skip-tests'], cwd: parentDir, description: 'Creating Angular project', interactive: true };
     case 'sveltekit':
-      return { cmd: 'npx', args: ['sv', 'create', projectName], cwd: parentDir, description: 'Creating SvelteKit project' };
+      return { cmd: 'npx', args: ['sv', 'create', projectName], cwd: parentDir, description: 'Creating SvelteKit project', interactive: true };
     case 'astro':
       return buildAstroCommand(projectName, parentDir, pm);
     case 'remix':
-      return { cmd: 'npx', args: ['create-remix@latest', projectName], cwd: parentDir, description: 'Creating Remix project' };
+      return { cmd: 'npx', args: ['create-remix@latest', projectName], cwd: parentDir, description: 'Creating Remix project', interactive: true };
     case 'solidstart':
       return buildSolidCommand(projectName, parentDir, pm);
     default:
@@ -62,6 +62,7 @@ function buildNextjsCommand(
     args,
     cwd: parentDir,
     description: 'Creating Next.js project',
+    interactive: true,
   };
 }
 
@@ -78,6 +79,7 @@ function buildViteCommand(
       args: ['create', 'vite@latest', projectName, '--', '--template', template],
       cwd: parentDir,
       description: 'Creating Vite project',
+      interactive: true,
     };
   }
 
@@ -86,6 +88,7 @@ function buildViteCommand(
     args: ['create', 'vite', projectName, '--template', template],
     cwd: parentDir,
     description: 'Creating Vite project',
+    interactive: true,
   };
 }
 
@@ -95,9 +98,9 @@ function buildAstroCommand(
   pm: PackageManager
 ): ScaffoldCommand {
   if (pm === 'npm') {
-    return { cmd: 'npm', args: ['create', 'astro@latest', projectName], cwd: parentDir, description: 'Creating Astro project' };
+    return { cmd: 'npm', args: ['create', 'astro@latest', projectName], cwd: parentDir, description: 'Creating Astro project', interactive: true };
   }
-  return { cmd: pm, args: ['create', 'astro@latest', projectName], cwd: parentDir, description: 'Creating Astro project' };
+  return { cmd: pm, args: ['create', 'astro@latest', projectName], cwd: parentDir, description: 'Creating Astro project', interactive: true };
 }
 
 function buildSolidCommand(
@@ -106,9 +109,9 @@ function buildSolidCommand(
   pm: PackageManager
 ): ScaffoldCommand {
   if (pm === 'npm') {
-    return { cmd: 'npm', args: ['create', 'solid@latest', projectName], cwd: parentDir, description: 'Creating SolidStart project' };
+    return { cmd: 'npm', args: ['create', 'solid@latest', projectName], cwd: parentDir, description: 'Creating SolidStart project', interactive: true };
   }
-  return { cmd: pm, args: ['create', 'solid@latest', projectName], cwd: parentDir, description: 'Creating SolidStart project' };
+  return { cmd: pm, args: ['create', 'solid@latest', projectName], cwd: parentDir, description: 'Creating SolidStart project', interactive: true };
 }
 
 export function getWebsiteDevCommand(framework: string): string {

@@ -18,6 +18,7 @@ export function buildFullstackCommand(
         args: ['nuxi@latest', 'init', projectName],
         cwd: parentDir,
         description: 'Creating Nuxt full stack project',
+        interactive: true,
       };
     case 'sveltekit-fullstack':
       return {
@@ -25,6 +26,7 @@ export function buildFullstackCommand(
         args: ['sv', 'create', projectName],
         cwd: parentDir,
         description: 'Creating SvelteKit full stack project',
+        interactive: true,
       };
     case 'mern':
     case 'nextjs-express':
@@ -55,6 +57,7 @@ function buildNextjsSaasCommand(
     args: ['create', createArg, projectName, '--typescript', '--tailwind', '--eslint', '--app', pmFlag[pm]],
     cwd: parentDir,
     description: 'Creating Next.js SaaS starter',
+    interactive: true,
   };
 }
 
@@ -69,6 +72,7 @@ function buildT3Command(
       args: ['create', 't3-app@latest', projectName],
       cwd: parentDir,
       description: 'Creating T3 app',
+      interactive: true,
     };
   }
   return {
@@ -76,5 +80,6 @@ function buildT3Command(
     args: ['create', 't3-app@latest', projectName],
     cwd: parentDir,
     description: 'Creating T3 app',
+    interactive: true,
   };
 }

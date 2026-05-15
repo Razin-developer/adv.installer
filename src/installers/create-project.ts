@@ -1,7 +1,6 @@
 import path from 'path';
 import fs from 'fs-extra';
 import ora from 'ora';
-import chalk from 'chalk';
 import type { InstallOptions, ScaffoldCommand } from '../types/installer.js';
 import { runScaffoldCommand, runCommand } from '../utils/run-command.js';
 import { buildInstallCommand } from '../utils/package-manager.js';
@@ -23,6 +22,7 @@ import { writeEnvExample } from '../addons/write-env-example.js';
 import { writePrettierConfig } from '../addons/write-prettier-config.js';
 import { writeEslintConfig } from '../addons/write-eslint-config.js';
 import { ESSENTIAL_COMPONENTS, ALL_COMPONENTS } from '../config/shadcn-components.js';
+import { hasInstalledNodeModules } from '../utils/project-state.js';
 
 function resolveScaffoldCommand(options: InstallOptions): ScaffoldCommand | null {
   const { projectType, framework, projectName, targetDir, packageManager, installDeps } = options;
@@ -111,13 +111,24 @@ export async function createProject(options: InstallOptions): Promise<string[]> 
     const command = resolveScaffoldCommand(options);
     if (!command) throw new AdvInstallerError('Could not resolve scaffold command.', 'scaffold');
 
-    const spinner = ora(command.description + '...').start();
-    try {
+    if (command.interactive) {
+      logger.info(`${command.description}...`);
+      logger.info('If the framework asks follow-up questions, answer them directly here.');
+      logger.blank();
+
       await runScaffoldCommand(command, { ...runOpts, stdio: 'inherit' });
-      spinner.succeed(command.description + ' done.');
-    } catch (err) {
-      spinner.fail(command.description + ' failed.');
-      throw err;
+
+      logger.blank();
+      logger.success(`${command.description} done.`);
+    } else {
+      const spinner = ora(command.description + '...').start();
+      try {
+        await runScaffoldCommand(command, { ...runOpts, stdio: 'inherit' });
+        spinner.succeed(command.description + ' done.');
+      } catch (err) {
+        spinner.fail(command.description + ' failed.');
+        throw err;
+      }
     }
   }
 
@@ -126,8 +137,15 @@ export async function createProject(options: InstallOptions): Promise<string[]> 
   if (tailwind) {
     const spinner = ora('Setting up Tailwind CSS...').start();
     try {
-      await installTailwind(targetDir, options.framework, packageManager, runOpts);
-      spinner.succeed('Tailwind CSS configured.');
+      const result = await installTailwind(targetDir, options.framework, packageManager, runOpts);
+
+      if (result.status === 'configured') {
+        spinner.succeed(result.detail);
+      } else if (result.status === 'already-configured') {
+        spinner.info(result.detail);
+      } else {
+        spinner.warn(result.detail);
+      }
     } catch {
       spinner.warn('Could not set up Tailwind automatically. Run manually.');
     }
@@ -174,14 +192,20 @@ export async function createProject(options: InstallOptions): Promise<string[]> 
 
   // --- Install dependencies ---
   if (installDeps) {
-    const { cmd, args } = buildInstallCommand(packageManager);
-    const spinner = ora(`Installing dependencies with ${packageManager}...`).start();
-    try {
-      await runCommand(cmd, args, { cwd: targetDir, ...runOpts, stdio: 'inherit' });
-      spinner.succeed('Dependencies installed.');
-    } catch {
-      spinner.fail('Dependency install failed.');
-      nextSteps.push(`${packageManager} install`);
+    const alreadyInstalled = dryRun ? false : await hasInstalledNodeModules(targetDir);
+
+    if (alreadyInstalled) {
+      logger.info('Dependencies already appear to be installed by the scaffold. Skipping extra install.');
+    } else {
+      const { cmd, args } = buildInstallCommand(packageManager);
+      const spinner = ora(`Installing dependencies with ${packageManager}...`).start();
+      try {
+        await runCommand(cmd, args, { cwd: targetDir, ...runOpts, stdio: 'inherit' });
+        spinner.succeed('Dependencies installed.');
+      } catch {
+        spinner.fail('Dependency install failed.');
+        nextSteps.push(`${packageManager} install`);
+      }
     }
   } else {
     nextSteps.push(`${packageManager} install`);

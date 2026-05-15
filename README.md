@@ -1,6 +1,6 @@
 # adv-installer
 
-`adv-installer` is an interactive CLI for scaffolding modern projects without having to remember every framework-specific setup command.
+`adv-installer` is a globally installable npm CLI for scaffolding modern projects without having to remember every framework-specific setup command.
 
 Install it globally once, then run `adv` anywhere:
 
@@ -48,6 +48,13 @@ If you do not want a permanent global install, you can also run it with:
 npx adv-installer install
 ```
 
+## npm command behavior
+
+- Global install exposes the `adv` command everywhere through the package `bin` field.
+- `adv --version` always reflects the installed package version.
+- `npx adv-installer install` works for one-off runs without keeping the CLI globally installed.
+- `npm run link:global` makes the local checkout behave like a globally installed package while developing.
+
 ## Usage
 
 ```bash
@@ -73,6 +80,8 @@ adv install --dry-run
 adv install --verbose
 adv --help
 ```
+
+If an upstream generator like `create-next-app`, Astro, T3, Expo, or another scaffolder asks its own follow-up questions, adv now leaves that interaction visible in the terminal so you can answer it directly instead of hiding it behind a spinner.
 
 ## What the CLI can scaffold
 
@@ -180,6 +189,13 @@ From a fresh terminal:
 npm install -g adv-installer
 adv --version
 ```
+
+## Tailwind behavior
+
+- If the selected scaffold already includes Tailwind CSS, adv skips re-adding it.
+- For Vite-based starters, adv installs any missing Tailwind packages and also updates the project files needed to make Tailwind actually work.
+- That includes editing the Vite config to register `@tailwindcss/vite` and updating the entry stylesheet to import Tailwind.
+- For Astro projects, adv uses the official `astro add tailwind` integration command.
 
 ## Website docs
 

@@ -43,6 +43,7 @@ function buildNextjsAiChatCommand(
     args: ['create', createArg, projectName, '--typescript', '--tailwind', '--app', pmFlag[pm]],
     cwd: parentDir,
     description: 'Creating Next.js AI chat app',
+    interactive: true,
   };
 }
 

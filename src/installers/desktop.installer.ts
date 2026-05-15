@@ -19,6 +19,7 @@ export function buildDesktopCommand(
         args: ['create-electron-app@latest', projectName, '--template', 'webpack-typescript'],
         cwd: parentDir,
         description: 'Creating Electron + React project',
+        interactive: true,
       };
     case 'neutralino':
       return {
@@ -26,6 +27,7 @@ export function buildDesktopCommand(
         args: ['@neutralinojs/neu', 'create', projectName],
         cwd: parentDir,
         description: 'Creating Neutralino project',
+        interactive: true,
       };
     default:
       throw new Error(`Unknown desktop framework: ${framework}`);
@@ -44,6 +46,7 @@ function buildTauriCommand(
       args: ['create', 'tauri-app@latest', projectName, '--', '--template', template],
       cwd: parentDir,
       description: 'Creating Tauri project',
+      interactive: true,
     };
   }
   return {
@@ -51,5 +54,6 @@ function buildTauriCommand(
     args: ['create', 'tauri-app@latest', projectName, '--template', template],
     cwd: parentDir,
     description: 'Creating Tauri project',
+    interactive: true,
   };
 }

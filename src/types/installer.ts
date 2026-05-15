@@ -45,6 +45,7 @@ export interface ScaffoldCommand {
   args: string[];
   cwd: string;
   description: string;
+  interactive?: boolean;
 }
 
 export interface QuickPreset {

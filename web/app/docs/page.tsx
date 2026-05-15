@@ -123,6 +123,11 @@ bun add -g ${packageName}`}</Block>
       <H2 id="cli-reference">CLI reference</H2>
       <P>The main command remains:</P>
       <Block>adv install</Block>
+      <P>
+        When an upstream generator asks follow-up questions, the CLI keeps that prompt stream visible
+        so you can answer it directly. That applies to tools like <IC>create-next-app</IC>, Astro,
+        T3, Expo, and similar scaffolders.
+      </P>
 
       <H3 id="flags">Flags</H3>
       <Table
@@ -173,6 +178,21 @@ npm pack --dry-run`}</Block>
         That shows exactly what will be published from the package, including the compiled CLI in
         <IC>dist/</IC>.
       </P>
+
+      <H2 id="tailwind">Tailwind integration</H2>
+      <P>
+        The Tailwind add-on now does more than install packages. It checks whether Tailwind is already
+        present, skips duplicate setup when the scaffold already included it, and edits project files
+        when setup is needed.
+      </P>
+      <Table
+        headers={['Project type', 'Behavior']}
+        rows={[
+          ['Next.js and built-in Tailwind starters', 'Detected and skipped when Tailwind is already configured.'],
+          ['React + Vite / Vue + Vite', 'Installs missing Tailwind packages, edits the Vite config, and updates the entry CSS file.'],
+          ['Astro', 'Runs the official astro Tailwind integration command.'],
+        ]}
+      />
 
       <H2 id="publishing">Before publish</H2>
       <P>Run the full validation flow before releasing.</P>

@@ -1,0 +1,62 @@
+{
+  "name": "adv-installer",
+  "version": "0.1.0",
+  "description": "An interactive CLI for scaffolding modern projects with presets, add-ons, and smart defaults.",
+  "type": "module",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "main": "./dist/index.js",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "bin": {
+    "adv": "./dist/index.js"
+  },
+  "scripts": {
+    "dev": "tsx src/index.ts",
+    "build": "tsup",
+    "prepack": "npm run build",
+    "check:publish": "npm run lint && npm run test && npm pack --dry-run",
+    "link:global": "npm link",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint src tests",
+    "format": "prettier --write \"src/**/*.ts\" \"tests/**/*.ts\""
+  },
+  "keywords": [
+    "cli",
+    "scaffold",
+    "project-generator",
+    "typescript",
+    "nextjs",
+    "vite",
+    "tailwind",
+    "shadcn"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@inquirer/prompts": "^7.0.0",
+    "chalk": "^5.3.0",
+    "commander": "^12.0.0",
+    "execa": "^9.4.0",
+    "fs-extra": "^11.2.0",
+    "ora": "^8.1.0",
+    "zod": "^3.23.0"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^11.0.4",
+    "@types/node": "^20.14.0",
+    "eslint": "^9.0.0",
+    "prettier": "^3.2.0",
+    "tsup": "^8.0.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.4.0",
+    "typescript-eslint": "^8.0.0",
+    "vitest": "^1.5.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

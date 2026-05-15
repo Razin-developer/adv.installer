@@ -1,0 +1,9 @@
+node_modules/
+dist/
+*.log
+.env
+.env.local
+.DS_Store
+adv-installer.zip
+web/.next/
+web/public/adv-installer.zip

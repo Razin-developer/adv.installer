@@ -1,3 +1,5 @@
+import { npmUrl, packageName, packageVersion, repoUrl } from '../../lib/site';
+
 function IC({ children }: { children: React.ReactNode }) {
   return (
     <code className="rounded border border-zinc-800 bg-zinc-900 px-1.5 py-0.5 font-mono text-[0.8em] text-emerald-300">
@@ -69,27 +71,44 @@ function Table({
   );
 }
 
-const packageName = 'adv-installer';
-
 export default function DocsPage() {
   return (
     <div>
       <div className="mb-10">
         <div className="mb-4 inline-flex rounded-full border border-zinc-800 bg-zinc-900 px-2.5 py-1 font-mono text-xs text-zinc-500">
-          npm package workflow
+          v{packageVersion} npm package workflow
         </div>
         <h1 className="text-4xl font-bold text-zinc-100">Documentation</h1>
         <P>
-          This project now ships as a standard npm CLI. The primary goal is simple: install the
-          package globally and have <IC>adv</IC> available from any terminal.
+          This project ships as a standard npm CLI. The goal is simple: install the package globally
+          and have <IC>adv</IC> available from any terminal, while still supporting clean one-off
+          runs through <IC>npx {packageName}</IC>.
         </P>
+        <div className="mt-5 flex flex-wrap gap-3">
+          <a
+            href={npmUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center rounded-xl bg-emerald-400 px-4 py-2 text-sm font-semibold text-zinc-950 transition hover:bg-emerald-300"
+          >
+            npm package
+          </a>
+          <a
+            href={repoUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center rounded-xl border border-zinc-800 bg-zinc-900 px-4 py-2 text-sm font-semibold text-zinc-100 transition hover:border-zinc-600 hover:bg-zinc-800"
+          >
+            GitHub repo
+          </a>
+        </div>
       </div>
 
       <H2 id="quick-start">Quick start</H2>
       <P>Install the package globally, verify the command, then scaffold a project.</P>
       <Block>{`npm install -g ${packageName}
 adv --version
-adv install`}</Block>
+adv`}</Block>
 
       <H2 id="installation">Install</H2>
       <P>Any package manager with global install support works.</P>
@@ -106,23 +125,27 @@ yarn global add ${packageName}
 bun add -g ${packageName}`}</Block>
 
       <P>If you only want to run it once without keeping it installed globally:</P>
-      <Block>{`npx ${packageName} install`}</Block>
+      <Block>{`npx ${packageName}`}</Block>
 
       <H2 id="verify">Verify adv is available everywhere</H2>
+      <P>After a global install, open a fresh terminal and run:</P>
+      <Block>{`adv --version
+adv-installer --version`}</Block>
       <P>
-        After a global install, open a fresh terminal and run:
-      </P>
-      <Block>{`adv --version`}</Block>
-      <P>
-        The CLI is globally available because <IC>package.json</IC> exposes the binary through:
+        The CLI is globally available because <IC>package.json</IC> exposes both binaries through the
+        standard npm <IC>bin</IC> field.
       </P>
       <Block>{`"bin": {
-  "adv": "./dist/index.js"
+  "adv": "dist/index.js",
+  "adv-installer": "dist/index.js"
 }`}</Block>
 
       <H2 id="cli-reference">CLI reference</H2>
-      <P>The main command remains:</P>
-      <Block>adv install</Block>
+      <P>The supported command styles are:</P>
+      <Block>{`adv
+adv install
+adv init
+npx ${packageName}`}</Block>
       <P>
         When an upstream generator asks follow-up questions, the CLI keeps that prompt stream visible
         so you can answer it directly. That applies to tools like <IC>create-next-app</IC>, Astro,
@@ -134,6 +157,11 @@ bun add -g ${packageName}`}</Block>
         headers={['Flag', 'Purpose']}
         rows={[
           [<IC key="quick">{'--quick <preset>'}</IC>, 'Use a preset and skip most prompts.'],
+          [<IC key="name">{'--name <project-name>'}</IC>, 'Set the project name without prompting.'],
+          [<IC key="dir">{'--dir <path>'}</IC>, 'Set the target directory without prompting.'],
+          [<IC key="pm">{'--package-manager <pm>'}</IC>, 'Choose pnpm, npm, yarn, or bun.'],
+          [<IC key="skip">--skip-install</IC>, 'Skip the final dependency installation step.'],
+          [<IC key="yes">--yes</IC>, 'Skip the final create-project confirmation prompt.'],
           [<IC key="dry">--dry-run</IC>, 'Preview changes without creating files or running commands.'],
           [<IC key="verbose">--verbose</IC>, 'Print additional command execution details.'],
           [<IC key="color">--no-color</IC>, 'Disable color output.'],
@@ -152,6 +180,11 @@ adv install --quick hono
 adv install --quick expo
 adv install --quick ai-chat`}</Block>
 
+      <H3 id="scripted-runs">Scripted runs</H3>
+      <P>For smoke tests or repeatable setup, pass the remaining answers as explicit flags.</P>
+      <Block>{`adv --quick express --name api --dir ./api --package-manager npm --skip-install --yes
+npx ${packageName} --quick express --name api --dir ./api --package-manager npm --skip-install --yes`}</Block>
+
       <H2 id="local-development">Build locally</H2>
       <P>Use the root project to develop and build the CLI package.</P>
       <Block>{`npm install
@@ -164,14 +197,13 @@ node dist/index.js --version`}</Block>
         machine, use npm linking.
       </P>
       <Block>{`npm run link:global
-adv --version`}</Block>
+adv --version
+adv-installer --version`}</Block>
       <P>Remove that global link later if you no longer need it:</P>
-      <Block>{`npm unlink -g ${packageName}`}</Block>
+      <Block>{`npm run unlink:global`}</Block>
 
       <H2 id="package-preview">Preview the published package contents</H2>
-      <P>
-        The old custom ZIP workflow has been removed. Use the standard npm package preview instead.
-      </P>
+      <P>The old custom ZIP workflow has been removed. Use the standard npm package preview instead.</P>
       <Block>{`npm run check:publish
 npm pack --dry-run`}</Block>
       <P>
@@ -191,6 +223,7 @@ npm pack --dry-run`}</Block>
           ['Next.js and built-in Tailwind starters', 'Detected and skipped when Tailwind is already configured.'],
           ['React + Vite / Vue + Vite', 'Installs missing Tailwind packages, edits the Vite config, and updates the entry CSS file.'],
           ['Astro', 'Runs the official astro Tailwind integration command.'],
+          ['shadcn quick presets', 'Default to the essential component set instead of installing every component.'],
         ]}
       />
 
@@ -209,21 +242,19 @@ npm publish`}</Block>
       <P>If you publish under a scope, use:</P>
       <Block>{`npm publish --access public`}</Block>
 
-      <P>
-        You should also confirm that the package name is available before release:
-      </P>
+      <P>You should also confirm that the package name is available before release:</P>
       <Block>{`npm view ${packageName}`}</Block>
 
       <H2 id="after-publish">After publish</H2>
       <P>Verify the real install path from a clean terminal session.</P>
       <Block>{`npm install -g ${packageName}
 adv --version
-adv install --dry-run`}</Block>
+adv-installer --help
+adv init --quick express --name api --dir ./api --package-manager npm --skip-install --yes
+npx ${packageName} --quick express --name api --dir ./api --package-manager npm --skip-install --yes`}</Block>
 
       <H2 id="website-notes">Website notes</H2>
-      <P>
-        The website source is under <IC>web/</IC>. Run it locally with:
-      </P>
+      <P>The website source is under <IC>web/</IC>. Run it locally with:</P>
       <Block>{`cd web
 npm install
 npm run dev`}</Block>

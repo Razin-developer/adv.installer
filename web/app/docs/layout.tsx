@@ -18,6 +18,7 @@ const nav = [
     links: [
       { label: 'Core command', href: '#cli-reference' },
       { label: 'Quick presets', href: '#quick-presets' },
+      { label: 'Scripted runs', href: '#scripted-runs' },
       { label: 'Flags', href: '#flags' },
     ],
   },

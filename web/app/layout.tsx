@@ -1,8 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { repoUrl } from '../lib/site';
 import './globals.css';
-
-const repoPath = 'your-username/adv-installer';
 
 export const metadata: Metadata = {
   title: {
@@ -37,7 +36,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 Docs
               </Link>
               <a
-                href={`https://github.com/${repoPath}`}
+                href={repoUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-1.5 text-sm text-zinc-400 transition-colors hover:text-zinc-100"

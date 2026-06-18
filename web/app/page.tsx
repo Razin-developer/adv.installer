@@ -1,8 +1,5 @@
 import Link from 'next/link';
-
-const repoPath = 'your-username/adv-installer';
-const packageName = 'adv-installer';
-const version = '0.1.0';
+import { npmUrl, packageName, packageVersion, repoPath, repoUrl } from '../lib/site';
 
 async function getStars(): Promise<number> {
   try {
@@ -27,7 +24,7 @@ function TerminalDemo() {
         <div className="h-3 w-3 rounded-full bg-rose-400/70" />
         <div className="h-3 w-3 rounded-full bg-amber-400/70" />
         <div className="h-3 w-3 rounded-full bg-emerald-400/70" />
-        <span className="ml-2">terminal • anywhere on your machine</span>
+        <span className="ml-2">terminal anywhere on your machine</span>
       </div>
 
       <div className="space-y-2 p-5 font-mono text-sm leading-7">
@@ -39,14 +36,14 @@ function TerminalDemo() {
           <span className="text-zinc-600">$</span>{' '}
           <span className="text-zinc-100">adv --version</span>
         </p>
-        <p className="text-zinc-500">{version}</p>
+        <p className="text-zinc-500">{packageVersion}</p>
         <p>
           <span className="text-zinc-600">$</span>{' '}
-          <span className="text-zinc-100">adv install --quick nextjs</span>
+          <span className="text-zinc-100">npx adv-installer --quick nextjs</span>
         </p>
         <p className="text-zinc-500">Scaffolding Next.js project...</p>
         <p className="text-zinc-500">Adding Tailwind CSS...</p>
-        <p className="text-zinc-500">Installing shadcn/ui essentials...</p>
+        <p className="text-zinc-500">Installing shadcn/ui essential components...</p>
         <p className="text-emerald-400">Done. Your project is ready.</p>
       </div>
     </div>
@@ -55,12 +52,12 @@ function TerminalDemo() {
 
 const features = [
   {
-    title: 'Global CLI that stays simple',
-    desc: 'Publish once to npm, then use adv from any terminal with a normal global install or npm link during development.',
+    title: 'Dual entrypoints for real npm usage',
+    desc: 'Install globally and use adv anywhere, or run the package directly with npx adv-installer when you want a one-off scaffold.',
   },
   {
-    title: 'Interactive and quick modes',
-    desc: 'Run the full guided flow or skip to a preset for Next.js, React, Tauri, Express, Hono, Expo, and AI chat starters.',
+    title: 'Interactive and scripted modes',
+    desc: 'Run the guided flow by default, or pass quick presets and explicit flags for clean smoke tests and repeatable setup.',
   },
   {
     title: 'Polished project add-ons',
@@ -68,7 +65,7 @@ const features = [
   },
   {
     title: 'Safer release workflow',
-    desc: 'Build with tsup, inspect package contents with npm pack --dry-run, and publish with a standard npm release flow.',
+    desc: 'Build with tsup, inspect package contents with npm pack --dry-run, then verify global and npx flows before shipping.',
   },
 ];
 
@@ -80,13 +77,13 @@ const installOptions = [
   },
   {
     label: 'One-off usage',
-    command: `npx ${packageName} install`,
-    note: 'Useful when you do not want to keep the CLI installed globally.',
+    command: `npx ${packageName}`,
+    note: 'Runs the package directly without keeping it installed globally.',
   },
   {
     label: 'Local development',
     command: 'npm run link:global',
-    note: 'Creates a global adv command from your local checkout while you are building the CLI.',
+    note: 'Creates global adv and adv-installer commands from your local checkout.',
   },
 ];
 
@@ -111,7 +108,7 @@ export default async function HomePage() {
           <div className="space-y-8">
             <div className="inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 font-mono text-sm text-emerald-300">
               <span className="h-2 w-2 rounded-full bg-emerald-400" />
-              v{version} npm-first CLI
+              v{packageVersion} npm-first CLI
             </div>
 
             <div className="space-y-4">
@@ -124,14 +121,14 @@ export default async function HomePage() {
 
               <p className="max-w-2xl text-lg leading-8 text-zinc-400 sm:text-xl">
                 adv-installer is a clean project scaffolding CLI for websites, apps, APIs, games,
-                and AI builds. Publish it like a normal npm package, install it globally, and keep
-                the command available in every terminal.
+                and AI builds. Publish it like a normal npm package, install it globally, or run it
+                straight from npx when you just need one scaffold.
               </p>
             </div>
 
             <div className="flex flex-col gap-3 sm:flex-row">
               <a
-                href={`https://www.npmjs.com/package/${packageName}`}
+                href={npmUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center rounded-xl bg-emerald-400 px-5 py-3 text-sm font-semibold text-zinc-950 transition hover:bg-emerald-300"
@@ -145,12 +142,12 @@ export default async function HomePage() {
                 Read install and publish docs
               </Link>
               <a
-                href={`https://github.com/${repoPath}`}
+                href={repoUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center rounded-xl border border-zinc-800 px-5 py-3 text-sm text-zinc-400 transition hover:border-zinc-600 hover:text-zinc-100"
               >
-                GitHub{stars > 0 ? ` • ${stars.toLocaleString()} stars` : ''}
+                GitHub{stars > 0 ? ` | ${stars.toLocaleString()} stars` : ''}
               </a>
             </div>
           </div>
@@ -212,8 +209,8 @@ export default async function HomePage() {
             </p>
             <h2 className="text-3xl font-bold tracking-tight">From local build to public package</h2>
             <p className="mt-4 leading-7 text-zinc-400">
-              The project now ships as a standard npm CLI package. No custom ZIP build is required,
-              and the docs are centered around global installation and npm publishing.
+              The project now ships as a standard npm CLI package. The docs, npm page, and website
+              all point to the same package and repository metadata.
             </p>
           </div>
 
@@ -238,7 +235,7 @@ export default async function HomePage() {
               <div className="rounded-xl border border-zinc-800 bg-zinc-950 p-4 font-mono text-sm leading-7 text-zinc-100">
                 <div>npm install -g {packageName}</div>
                 <div>adv --version</div>
-                <div>adv install</div>
+                <div>adv init</div>
               </div>
               <p className="mt-4 leading-7 text-zinc-400">
                 That is the key outcome: once installed globally, <span className="font-mono text-zinc-200">adv</span> is available from every user terminal.

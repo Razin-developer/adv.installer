@@ -1,6 +1,8 @@
+import path from 'node:path';
 import { select, confirm } from '@inquirer/prompts';
 import chalk from 'chalk';
 import type { InstallOptions, ProjectType } from '../types/installer.js';
+import type { PackageManager } from '../types/installer.js';
 import { resolveQuickPreset } from '../config/quick-presets.js';
 import { askProjectType } from '../prompts/ask-project-type.js';
 import { askFramework } from '../prompts/ask-framework.js';
@@ -10,6 +12,7 @@ import { askPackageManager } from '../prompts/ask-package-manager.js';
 import { askInstallDeps } from '../prompts/ask-install-deps.js';
 import { askTailwind, askUiLibrary, askShadcnComponents, askAddons } from '../prompts/ask-addons.js';
 import { createProject } from '../installers/create-project.js';
+import { validateAndNormalizeName } from '../utils/names.js';
 import { showWelcome, showSummary, showSuccess, showCancelled, showError } from '../utils/terminal.js';
 import { dirExists, isDirEmpty } from '../utils/paths.js';
 import { isUserCancel, isAdvInstallerError } from '../utils/errors.js';
@@ -17,6 +20,11 @@ import { logger } from '../utils/logger.js';
 
 export interface InstallCommandFlags {
   quick?: string;
+  projectName?: string;
+  targetDir?: string;
+  packageManager?: PackageManager;
+  installDeps?: boolean;
+  confirm?: boolean;
   dryRun: boolean;
   verbose: boolean;
 }
@@ -75,10 +83,13 @@ async function runFlow(flags: InstallCommandFlags): Promise<void> {
   // Show summary and ask for confirmation
   showSummary(options);
 
-  const confirmed = await confirm({
-    message: chalk.bold('Create this project?'),
-    default: true,
-  });
+  const confirmed =
+    flags.confirm === false
+      ? true
+      : await confirm({
+          message: chalk.bold('Create this project?'),
+          default: true,
+        });
 
   if (!confirmed) {
     showCancelled();
@@ -98,13 +109,13 @@ async function buildInteractiveOptions(flags: InstallCommandFlags): Promise<Inst
 
   logger.blank();
 
-  const projectName = await askProjectName();
-  const targetDir = await askDirectory(projectName);
+  const projectName = await resolveProjectName(flags);
+  const targetDir = await resolveTargetDir(projectName, flags);
 
   logger.blank();
 
-  const packageManager = await askPackageManager(process.cwd());
-  const installDeps = await askInstallDeps();
+  const packageManager = await resolvePackageManager(flags);
+  const installDeps = await resolveInstallDeps(flags);
 
   logger.blank();
 
@@ -157,13 +168,13 @@ async function buildQuickOptions(presetKey: string, flags: InstallCommandFlags):
   logger.info(`Quick setup: ${chalk.bold(preset.description)}`);
   logger.blank();
 
-  const projectName = await askProjectName();
-  const targetDir = await askDirectory(projectName);
+  const projectName = await resolveProjectName(flags);
+  const targetDir = await resolveTargetDir(projectName, flags);
 
   logger.blank();
 
-  const packageManager = await askPackageManager(process.cwd());
-  const installDeps = await askInstallDeps();
+  const packageManager = await resolvePackageManager(flags);
+  const installDeps = await resolveInstallDeps(flags);
 
   return {
     projectType: preset.projectType,
@@ -179,6 +190,48 @@ async function buildQuickOptions(presetKey: string, flags: InstallCommandFlags):
     dryRun: flags.dryRun,
     verbose: flags.verbose,
   };
+}
+
+async function resolveProjectName(flags: InstallCommandFlags): Promise<string> {
+  if (flags.projectName) {
+    const result = validateAndNormalizeName(flags.projectName);
+
+    if (!result.valid) {
+      throw new Error(result.warnings[0] ?? 'Invalid project name.');
+    }
+
+    for (const warning of result.warnings) {
+      logger.warn(warning);
+    }
+
+    return result.normalized;
+  }
+
+  return askProjectName();
+}
+
+async function resolveTargetDir(projectName: string, flags: InstallCommandFlags): Promise<string> {
+  if (flags.targetDir) {
+    return path.resolve(flags.targetDir);
+  }
+
+  return askDirectory(projectName);
+}
+
+async function resolvePackageManager(flags: InstallCommandFlags): Promise<PackageManager> {
+  if (flags.packageManager) {
+    return flags.packageManager;
+  }
+
+  return askPackageManager(process.cwd());
+}
+
+async function resolveInstallDeps(flags: InstallCommandFlags): Promise<boolean> {
+  if (typeof flags.installDeps === 'boolean') {
+    return flags.installDeps;
+  }
+
+  return askInstallDeps();
 }
 
 async function handleNonEmptyDir(dirPath: string): Promise<'continue' | 'cancel' | 'choose-another'> {

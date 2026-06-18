@@ -1,6 +1,6 @@
 {
   "name": "adv-installer",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "An interactive CLI for scaffolding modern projects with presets, add-ons, and smart defaults.",
   "type": "module",
   "files": [

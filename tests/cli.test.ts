@@ -32,8 +32,8 @@ describe('createCli', () => {
 
   it('publishes both adv binaries', () => {
     expect(packageJson.bin).toEqual({
-      adv: './dist/index.js',
-      'adv-installer': './dist/index.js',
+      adv: 'dist/index.js',
+      'adv-installer': 'dist/index.js',
     });
   });
 });

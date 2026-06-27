@@ -1,8 +1,8 @@
 # adv-installer
 
-`adv-installer` is an npm CLI for scaffolding modern projects with presets, add-ons, and sensible defaults.
+`adv-installer` is an npm CLI tool for setting up modern projects with presets, add-ons, and smart defaults.
 
-Install it globally once, then run `adv` anywhere:
+You only need to install it globally once. After that, you can run `adv` anywhere:
 
 ```bash
 npm install -g adv-installer
@@ -10,7 +10,7 @@ adv --version
 adv
 ```
 
-If you want a one-off run without a global install:
+If you prefer to run it once without a global install:
 
 ```bash
 npx adv-installer
@@ -18,11 +18,11 @@ npx adv-installer
 
 ## Why use it
 
-- One CLI for websites, mobile apps, desktop apps, APIs, full-stack starters, games, and AI projects
-- Interactive flow for guided setup, plus quick presets for common stacks
-- Optional add-ons like Tailwind CSS, shadcn/ui, Git, README generation, ESLint, and Prettier
-- Non-interactive flags for smoke tests and scripted scaffolding
-- Standard npm packaging and release flow
+- One CLI for websites, mobile apps, desktop apps, APIs, full-stack starters, games, and AI projects.
+- Interactive setup for guided installation, plus quick presets for common stacks.
+- Optional add-ons such as Tailwind CSS, shadcn/ui, Git, README generation, ESLint, and Prettier.
+- Non-interactive flags for smoke tests and automated setup.
+- Standard npm packaging and release flow.
 
 ## Install
 
@@ -42,7 +42,7 @@ yarn global add adv-installer
 bun add -g adv-installer
 ```
 
-Verify from any terminal:
+Check the installation from any terminal:
 
 ```bash
 adv --version
@@ -51,10 +51,10 @@ adv-installer --version
 
 ## Command behavior
 
-- Global install exposes both `adv` and `adv-installer`.
-- `npx adv-installer` works directly and starts the installer without requiring `install`.
-- `adv init` is an alias for `adv install`.
-- `npm run link:global` makes the local checkout behave like a globally installed package while developing.
+- A global install makes both `adv` and `adv-installer` available.
+- `npx adv-installer` works right away and starts the installer without needing `install`.
+- `adv init` is another way to say `adv install`.
+- `npm run link:global` allows the local checkout to act like a globally installed package during development.
 
 ## Usage
 
@@ -62,14 +62,14 @@ adv-installer --version
 adv
 ```
 
-Explicit command forms also work:
+You can also use explicit command forms:
 
 ```bash
 adv install
 adv init
 ```
 
-Quick presets:
+Quick presets are available:
 
 ```bash
 adv install --quick nextjs
@@ -81,7 +81,7 @@ adv install --quick expo
 adv install --quick ai-chat
 ```
 
-Useful flags:
+Useful flags you can use:
 
 ```bash
 adv --help
@@ -91,19 +91,19 @@ adv install --verbose
 adv --quick express --name api --dir ./api --package-manager npm --skip-install --yes
 ```
 
-If an upstream generator like `create-next-app`, Astro, T3, Expo, or another scaffolder asks follow-up questions, adv leaves that interaction visible in the terminal so you can answer it directly.
+If an upstream generator like `create-next-app`, Astro, T3, Expo, or any other scaffolder asks follow-up questions, adv keeps that interaction visible in the terminal so you can respond directly.
 
 ## What the CLI can scaffold
 
-| Type | Frameworks / Presets |
-|------|----------------------|
-| Website | Next.js, React + Vite, Vue + Vite, Nuxt, Angular, SvelteKit, Astro, Remix, SolidStart |
-| Mobile | Expo, React Native CLI, Flutter, Kotlin Android |
-| Desktop | Tauri + React, Tauri + Vue, Tauri + Svelte, Electron + React, Neutralino |
-| Backend API | Express, Hono, Fastify, NestJS, Flask, Django |
-| Full Stack | Next.js SaaS, T3 Stack, MERN, Nuxt Full Stack, SvelteKit Full Stack |
-| Game Dev | Phaser, Three.js, Kaboom, Godot, Unity |
-| AI Projects | Next.js AI Chat, Flask AI API, Computer Vision, Ollama, LangChain |
+| Type        | Frameworks / Presets                                                                  |
+| ----------- | ------------------------------------------------------------------------------------- |
+| Website     | Next.js, React + Vite, Vue + Vite, Nuxt, Angular, SvelteKit, Astro, Remix, SolidStart |
+| Mobile      | Expo, React Native CLI, Flutter, Kotlin Android                                       |
+| Desktop     | Tauri + React, Tauri + Vue, Tauri + Svelte, Electron + React, Neutralino              |
+| Backend API | Express, Hono, Fastify, NestJS, Flask, Django                                         |
+| Full Stack  | Next.js SaaS, T3 Stack, MERN, Nuxt Full Stack, SvelteKit Full Stack                   |
+| Game Dev    | Phaser, Three.js, Kaboom, Godot, Unity                                                |
+| AI Projects | Next.js AI Chat, Flask AI API, Computer Vision, Ollama, LangChain                     |
 
 ## Local development
 
@@ -112,7 +112,7 @@ npm install
 npm run dev
 ```
 
-Build the published CLI output:
+Build the CLI output that will be published:
 
 ```bash
 npm run build
@@ -125,7 +125,7 @@ node dist/index.js --version
 node dist/index.js --help
 ```
 
-Link the package globally while developing:
+Link the package globally while you develop:
 
 ```bash
 npm run link:global
@@ -133,7 +133,7 @@ adv --version
 adv-installer --version
 ```
 
-Remove that global link later:
+You can remove that global link later:
 
 ```bash
 npm run unlink:global
@@ -150,7 +150,7 @@ npm run build
 npm run check:publish
 ```
 
-`npm run check:publish` shows exactly which files would be shipped.
+`npm run check:publish` shows exactly which files will be published.
 
 ### 2. Make sure the package name is available
 
@@ -188,7 +188,7 @@ npm publish --access public
 
 ### 6. Verify the published CLI
 
-From a fresh terminal:
+Open a fresh terminal and run:
 
 ```bash
 npm install -g adv-installer
@@ -197,7 +197,7 @@ adv-installer --help
 adv init --quick express --name api --dir ./api --package-manager npm --skip-install --yes
 ```
 
-One-off `npx` verification:
+For one-off `npx` verification:
 
 ```bash
 npx adv-installer --version
@@ -206,16 +206,16 @@ npx adv-installer --quick express --name api --dir ./api --package-manager npm -
 
 ## Tailwind and shadcn behavior
 
-- If the selected scaffold already includes Tailwind CSS, adv skips re-adding it.
-- For Vite-based starters, adv installs missing Tailwind packages, updates the Vite config, and updates the entry stylesheet.
+- If the chosen scaffold already has Tailwind CSS, adv skips adding it again.
+- For Vite-based starters, adv installs any missing Tailwind packages, updates the Vite config, and modifies the entry stylesheet.
 - For Astro projects, adv uses the official `astro add tailwind` integration command.
-- Quick presets that use shadcn/ui default to the essential component set instead of installing every component.
+- Quick presets that involve shadcn/ui default to the essential component set instead of installing all available components.
 
 ## Website docs
 
-The marketing site lives in [web](/C:/Users/razin/Desktop/Coding/test/web).
+The marketing site is located in [web](/C:/Users/razin/Desktop/Coding/test/web).
 
-Run it locally:
+To run it locally:
 
 ```bash
 cd web
@@ -223,7 +223,7 @@ npm install
 npm run dev
 ```
 
-Build it for production:
+To build it for production:
 
 ```bash
 cd web
@@ -232,25 +232,25 @@ npm run build
 
 ## Project scripts
 
-| Script | Purpose |
-|--------|---------|
-| `npm run dev` | Run the CLI from TypeScript source |
-| `npm run build` | Compile the CLI to `dist/` |
-| `npm run lint` | Lint `src/` and `tests/` |
-| `npm run test` | Run Vitest once |
-| `npm run test:watch` | Run Vitest in watch mode |
-| `npm run format` | Format source and tests with Prettier |
-| `npm run link:global` | Create a global `adv` command with `npm link` |
-| `npm run unlink:global` | Remove the development global link |
-| `npm run check:publish` | Lint, test, and dry-run the npm package contents |
-| `npm run smoke:package` | Pack the CLI, install it globally, and smoke-test `adv` plus `npx` flows |
+| Script                  | Purpose                                                            |
+| ----------------------- | ------------------------------------------------------------------ |
+| `npm run dev`           | Run the CLI from TypeScript source                                 |
+| `npm run build`         | Compile the CLI to `dist/`                                         |
+| `npm run lint`          | Lint `src/` and `tests/`                                           |
+| `npm run test`          | Run Vitest once                                                    |
+| `npm run test:watch`    | Run Vitest in watch mode                                           |
+| `npm run format`        | Format source and tests with Prettier                              |
+| `npm run link:global`   | Create a global `adv` command using `npm link`                     |
+| `npm run unlink:global` | Remove the development global link                                 |
+| `npm run check:publish` | Lint, test, and prepare the npm package contents                   |
+| `npm run smoke:package` | Pack the CLI, install it globally, and test `adv` plus `npx` flows |
 
 ## Notes
 
 - `adv --version` works after a global install because the package exposes the `adv` binary through the `bin` field in [package.json](C:/Users/razin/Desktop/Coding/test/package.json).
-- `npx adv-installer` works because the package also exposes an `adv-installer` binary and the root command starts the installer directly.
-- `npm pack` creates the standard npm tarball if you want to inspect the distributable artifact locally.
-- Some upstream scaffolders may still install dependencies even when the CLI requests skip-install mode.
+- `npx adv-installer` works as the package also exposes an `adv-installer` binary. The root command starts the installer directly.
+- `npm pack` creates a standard npm tarball if you want to check the distributable artifact locally.
+- Some upstream scaffolders may still install dependencies even if the CLI requests to skip installation.
 
 ## License
 
